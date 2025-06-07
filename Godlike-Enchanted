@@ -422,8 +422,8 @@ folder9:AddSwitch("Looped Training", function(state)
     end
 end)
 
-local Blaze = window:AddTab("Auto Blaze Sell")
-local folder10 = Blaze:AddFolder("Blazing Vortex")
+local Blaze = window:AddTab("Blazing Vortex Sell")
+local folder10 = Blaze:AddFolder("Auto Blaze Sell")
 
 folder10:AddSwitch("Blaze Sell", function(Value)
     blazesell = Value
