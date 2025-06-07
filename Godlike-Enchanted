@@ -228,6 +228,9 @@ folder4:AddSwitch("Auto Buy Shurikens", function(state)
     end
 end)
 
+
+local selling = false
+local loopConnection
 folder10:AddSwitch("Blaze Sell", function(Value)
     blazesell = Value
     if blazesell then
