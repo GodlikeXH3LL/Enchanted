@@ -1,4 +1,4 @@
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/iblameaabis/Ililililililililililililil/refs/heads/main/W%20UI", true))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/iblameaabis/Ililililililililililililil/refs/heads/main/W%20UI"))()
 
 local window = library:AddWindow("Enchanted Hub | Ninja", {
     main_color = Color3.fromRGB(1, 2, 3),
@@ -42,6 +42,9 @@ folder2:AddButton("Less Lag", function()
     settings().Rendering.QualityLevel = 1
 end)
 
+local cleanupLoop
+local hideallframes
+
 folder2:AddButton("FPS", function()
     RemoveLag()
     if cleanupLoop then
@@ -56,6 +59,8 @@ folder2:AddButton("FPS", function()
     end)
 end)
 
+local hideFramesConnection
+
 folder2:AddSwitch("Hide Frames", function(Value)
     hideframes = Value
     if hideframes then
@@ -68,6 +73,7 @@ folder2:AddSwitch("Hide Frames", function(Value)
     end
     if hideallframes then
         task.cancel(hideallframes)
+        hideallframes = nil
     end
 end)
 
@@ -145,7 +151,7 @@ folder3:AddSwitch("Auto Sell", function(state)
             while _G.sell do
                 wait()
                 local player = game.Players.LocalPlayer
-                local sellCircle = game.workspace.sellAreaCircles["sellAreaCircle15"]
+                local sellCircle = game.Workspace.sellAreaCircles["sellAreaCircle15"]
                 if sellCircle and sellCircle:FindFirstChild("circleInner") then
                     sellCircle.circleInner.CFrame = player.Character.HumanoidRootPart.CFrame
                 end
@@ -158,14 +164,16 @@ folder3:AddSwitch("Auto Sell", function(state)
     end
 end)
 
+local sellWhenFullConnection
+
 folder3:AddSwitch("Auto Sell When Full", function(state)
-    _G.sell = state
-    if _G.sell then
+    _G.sellFull = state
+    if _G.sellFull then
         spawn(function()
-            while _G.sell do
+            while _G.sellFull do
                 wait()
                 if game.Players.LocalPlayer.PlayerGui.gameGui.maxNinjitsuMenu.Visible then
-                    local sellCircle = game.workspace.sellAreaCircles["sellAreaCircle15"]
+                    local sellCircle = game.Workspace.sellAreaCircles["sellAreaCircle15"]
                     if sellCircle and sellCircle:FindFirstChild("circleInner") then
                         sellCircle.circleInner.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
                     end
@@ -265,8 +273,7 @@ local folder10 = window:AddTab("Other")
 local switch10 = folder10:AddSwitch("Blaze Sell", function(Value)
     blazesell = Value
     if blazesell then
-        selling = true
-        loopConnection = coroutine.create(function()
+        local loopConnection = coroutine.create(function()
             local function Blazesell()
                 if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(83.8706284, 91245.5547, 120.034172, 0.239420652, -3.3713512e-08, -0.970915914, 2.72370784e-08, 1, -2.80069496e-08, 0.970915914, -1.97394705e-08, 0.239420652)
@@ -279,7 +286,7 @@ local switch10 = folder10:AddSwitch("Blaze Sell", function(Value)
                 end
             end
 
-            while blazesell do
+            while true do
                 Blazesell()
                 wait(3)
                 Respawn()
@@ -383,25 +390,33 @@ folder8:AddSwitch("Invisibility", function(state)
             end
         end)
     else
-        task.cancel(_G.invis)
+        if _G.invis then
+            _G.invis = false
+        end
     end
 end)
+
+local infiniteJumpConnection
 
 folder8:AddSwitch("Infinite Jump", function(state)
     infinitejump = state
     if infinitejump then
         _G.iJumps = true
         local InfiniteJumpEnabled = true
-        game:GetService("UserInputService").JumpRequest:Connect(function()
+        local userInputService = game:GetService("UserInputService")
+        infiniteJumpConnection = userInputService.JumpRequest:Connect(function()
             if InfiniteJumpEnabled then
-                local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass'Humanoid'
+                local humanoid = game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
                 if humanoid then
                     humanoid:ChangeState("Jumping")
                 end
             end
         end)
     else
-        task.cancel(_G.iJumps)
+        if infiniteJumpConnection then
+            infiniteJumpConnection:Disconnect()
+            infiniteJumpConnection = nil
+        end
     end
 end)
 
@@ -445,68 +460,70 @@ folder8:AddButton("Unlock All Islands", function()
     end
 end)
 
+local trainAllZones
+
 folder8:AddSwitch("Auto Train All Zones", function(state)
-  trainallzone = state
-  if trainallzone then
-    spawn(function()
-        local function MMWT()
-            if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(322.912567, 8830.49023, 87.7899475, -0.44533211, -1.57474229e-08, 0.895365477, 5.90717919e-09, 1, 2.05257855e-08, -0.895365477, 1.4429876e-08, -0.44533211)
+    trainAllZones = state
+    if trainAllZones then
+        spawn(function()
+            local function MMWT()
+                if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(322.912567, 8830.49023, 87.7899475, -0.44533211, -1.57474229e-08, 0.895365477, 5.90717919e-09, 1, 2.05257855e-08, -0.895365477, 1.4429876e-08, -0.44533211)
+                end
             end
-        end
-        local function LP()
-            if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-113.318001, 12958.5, 293.145996, 0.778010249, -8.46390602e-09, -0.628251612, -6.35732467e-10, 1, -1.42594345e-08, 0.628251612, 1.14933858e-08, 0.778010249)
+            local function LP()
+                if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-113.318001, 12958.5, 293.145996, 0.778010249, -8.46390602e-09, -0.628251612, -6.35732467e-10, 1, -1.42594345e-08, 0.628251612, 1.14933858e-08, 0.778010249)
+                end
             end
-        end
-        local function T()
-            if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(318.627594, 16872.0977, -8.53180027, -0.756375313, 6.09071265e-08, 0.654137909, 9.49819512e-09, 1, -8.21278263e-08, -0.654137909, -5.59063302e-08, -0.756375313)
+            local function T()
+                if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(318.627594, 16872.0977, -8.53180027, -0.756375313, 6.09071265e-08, 0.654137909, 9.49819512e-09, 1, -8.21278263e-08, -0.654137909, -5.59063302e-08, -0.756375313)
+                end
             end
-        end
-        local function ET()
-            if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(330.810181, 30383.0996, -16.7225971, -0.478063285, -6.45304565e-09, 0.878325403, 4.87447593e-08, 1, 3.38782478e-08, -0.878325403, 5.90097073e-08, -0.478063285)
+            local function ET()
+                if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(330.810181, 30383.0996, -16.7225971, -0.478063285, -6.45304565e-09, 0.878325403, 4.87447593e-08, 1, 3.38782478e-08, -0.878325403, 5.90097073e-08, -0.478063285)
+                end
             end
-        end
-        while true do
-            MMWT()
-            wait(3)
-            LP()
-            wait(3)
-            T()
-            wait(3)
-            ET()
-        end
-    end)
-  end
+            while true do
+                MMWT()
+                wait(3)
+                LP()
+                wait(3)
+                T()
+                wait(3)
+                ET()
+            end
+        end)
+    end
 end)
 
-else
-    trainallzone = false
+if false then
+    trainAllZones = false
 end
-end)
 
 local folder9 = MiscV3:AddFolder("Blaze Sell")
 
 folder9:AddSwitch("Auto Blaze", function(Value)
 ABS = Value
     if ABS then
-        function BVS()
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(85.2215424, 91245.5469, 120.192863, 0.517608643, -3.23137392e-08, -0.855617464, 3.34196812e-08, 1, -1.75492261e-08, 0.855617464, -1.95108321e-08, 0.517608643)
+        local function BVS()
+            if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(85.2215424, 91245.5469, 120.192863, 0.517608643, -3.23137392e-08, -0.855617464, 3.34196812e-08, 1, -1.75492261e-08, 0.855617464, -1.95108321e-08, 0.517608643)
+            end
         end
-        
-        function R()
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15.4311571, 63.4752312, 32.3788757, -0.312022954, 4.93972934e-08, -0.950074553, 7.51569189e-08, 1, 2.7310076e-08, 0.950074553, -6.28833021e-08, -0.312022954)
+
+        local function R()
+            if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15.4311571, 63.4752312, 32.3788757, -0.312022954, 4.93972934e-08, -0.950074553, 7.51569189e-08, 1, 2.7310076e-08, 0.950074553, -6.28833021e-08, -0.312022954)
+            end
         end
-        
+
         while true do
             BVS()
             wait(1)
             R()
         end
-    end)
-else
-    ABS = false
+    end
 end
-end)
