@@ -261,20 +261,25 @@ folder4:AddSwitch("Auto Buy Shurikens", function(state)
     end
 end)
 
-folder10:AddSwitch("Blaze Sell", function(Value)
+local folder10 = window:AddTab("Other")
+local switch10 = folder10:AddSwitch("Blaze Sell", function(Value)
     blazesell = Value
     if blazesell then
         selling = true
         loopConnection = coroutine.create(function()
             local function Blazesell()
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(83.8706284, 91245.5547, 120.034172, 0.239420652, -3.3713512e-08, -0.970915914, 2.72370784e-08, 1, -2.80069496e-08, 0.970915914, -1.97394705e-08, 0.239420652)
+                if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(83.8706284, 91245.5547, 120.034172, 0.239420652, -3.3713512e-08, -0.970915914, 2.72370784e-08, 1, -2.80069496e-08, 0.970915914, -1.97394705e-08, 0.239420652)
+                end
             end
 
             local function Respawn()
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(140.391495, 91245.8594, 68.4599762, -0.519667923, -1.53411737e-08, 0.854368329, -3.85448793e-08, 1, -5.48869172e-09, -0.854368329, -3.57838204e-08, -0.519667923)
+                if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(140.391495, 91245.8594, 68.4599762, -0.519667923, -1.53411737e-08, 0.854368329, -3.85448793e-08, 1, -5.48869172e-09, -0.854368329, -3.57838204e-08, -0.519667923)
+                end
             end
 
-            while selling do
+            while blazesell do
                 Blazesell()
                 wait(3)
                 Respawn()
@@ -282,7 +287,7 @@ folder10:AddSwitch("Blaze Sell", function(Value)
         end)
         coroutine.resume(loopConnection)
     else
-        selling = false
+        blazesell = false
     end
 end)
 
@@ -484,27 +489,24 @@ end)
 
 local folder9 = MiscV3:AddFolder("Blaze Sell")
 
-folder9:AddSwitch("Auto Blaze Sell", function(Value)
-    ABS = Value
+folder9:AddSwitch("Auto Blaze", function(Value)
+ABS = Value
     if ABS then
-        spawn(function()
-            local function BVS()
-                if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(85.2215424, 91245.5469, 120.192863, 0.517608643, -3.23137392e-08, -0.855617464, 3.34196812e-08, 1, -1.75492261e-08, 0.855617464, -1.95108321e-08, 0.517608643)
-                end
-            end
-            local function R()
-                if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15.4311571, 63.4752312, 32.3788757, -0.312022954, 4.93972934e-08, -0.950074553, 7.51569189e-08, 1, 2.7310076e-08, 0.950074553, -6.28833021e-08, -0.312022954)
-                end
-            end
-            while true do
-                BVS()
-                wait(1)
-                R()
-            end
-        end)
-    else
-        ABS = false
-    end
+        function BVS()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(85.2215424, 91245.5469, 120.192863, 0.517608643, -3.23137392e-08, -0.855617464, 3.34196812e-08, 1, -1.75492261e-08, 0.855617464, -1.95108321e-08, 0.517608643)
+        end
+        
+        function R()
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-15.4311571, 63.4752312, 32.3788757, -0.312022954, 4.93972934e-08, -0.950074553, 7.51569189e-08, 1, 2.7310076e-08, 0.950074553, -6.28833021e-08, -0.312022954)
+        end
+        
+        while true do
+            BVS()
+            wait(1)
+            R()
+        end
+    end)
+else
+    ABS = false
+end
 end)
